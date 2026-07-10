@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingState;
-import ru.practicum.shareit.exception.ValidationException;
 
 import java.util.List;
 
@@ -41,20 +40,12 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getAllByBooker(@RequestHeader(USER_ID_HEADER) Long userId,
                                            @RequestParam(defaultValue = "ALL") String state) {
-        return bookingService.getAllByBooker(userId, parseState(state));
+        return bookingService.getAllByBooker(userId, BookingState.from(state));
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getAllByOwner(@RequestHeader(USER_ID_HEADER) Long ownerId,
                                           @RequestParam(defaultValue = "ALL") String state) {
-        return bookingService.getAllByOwner(ownerId, parseState(state));
-    }
-
-    private BookingState parseState(String state) {
-        try {
-            return BookingState.valueOf(state.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new ValidationException("Unknown state: " + state);
-        }
+        return bookingService.getAllByOwner(ownerId, BookingState.from(state));
     }
 }

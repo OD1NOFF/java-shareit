@@ -2,15 +2,17 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
@@ -31,4 +33,21 @@ public class Comment {
 
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Comment)) {
+            return false;
+        }
+        Comment comment = (Comment) o;
+        return id != null && id.equals(comment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

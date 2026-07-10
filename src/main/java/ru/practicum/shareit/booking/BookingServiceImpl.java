@@ -91,7 +91,9 @@ public class BookingServiceImpl implements BookingService {
             case ALL -> bookingRepository.findAllByBookerIdOrderByStartDesc(bookerId);
         };
 
-        return bookings.stream().map(BookingMapper::toBookingDto).collect(Collectors.toList());
+        return bookings.stream()
+                .map(BookingMapper::toBookingDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -111,7 +113,9 @@ public class BookingServiceImpl implements BookingService {
             case ALL -> bookingRepository.findAllByItemOwnerIdOrderByStartDesc(ownerId);
         };
 
-        return bookings.stream().map(BookingMapper::toBookingDto).collect(Collectors.toList());
+        return bookings.stream()
+                .map(BookingMapper::toBookingDto)
+                .collect(Collectors.toList());
     }
 
     private User getUserOrThrow(Long userId) {
