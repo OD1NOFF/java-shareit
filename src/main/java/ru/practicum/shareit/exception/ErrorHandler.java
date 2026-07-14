@@ -50,4 +50,10 @@ public class ErrorHandler {
     public ErrorResponse handleOther(Throwable e) {
         return new ErrorResponse("Непредвиденная ошибка", e.getMessage());
     }
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(ValidationException e) {
+        return new ErrorResponse("Ошибка валидации", e.getMessage());
+    }
 }
