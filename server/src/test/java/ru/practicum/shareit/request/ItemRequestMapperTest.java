@@ -35,7 +35,7 @@ class ItemRequestMapperTest {
         itemRequest.setDescription("Нужна дрель");
         itemRequest.setCreated(LocalDateTime.now());
 
-        ItemRequestResponseDto dto = ItemRequestMapper.toResponseDto(itemRequest, null);
+        ItemRequestResponseDto dto = ItemRequestMapper.toResponseDto(itemRequest, List.of());
 
         assertThat(dto.getId()).isEqualTo(1L);
         assertThat(dto.getDescription()).isEqualTo("Нужна дрель");

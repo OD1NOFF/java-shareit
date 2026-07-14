@@ -221,4 +221,79 @@ class BookingServiceImplTest {
 
         assertThat(result).hasSize(1);
     }
+
+    @Test
+    void getAllByOwner_shouldReturnCurrent() {
+        bookingService.create(booker.getId(), makeRequest(
+                LocalDateTime.now().minusHours(1), LocalDateTime.now().plusDays(1)));
+
+        List<BookingDto> current = bookingService.getAllByOwner(owner.getId(), BookingState.CURRENT);
+
+        assertThat(current).hasSize(1);
+    }
+
+    @Test
+    void getAllByOwner_shouldReturnPast() {
+        List<BookingDto> past = bookingService.getAllByOwner(owner.getId(), BookingState.PAST);
+
+        assertThat(past).isEmpty();
+    }
+
+    @Test
+    void getAllByOwner_shouldReturnFuture() {
+        bookingService.create(booker.getId(), makeRequest(
+                LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2)));
+
+        List<BookingDto> future = bookingService.getAllByOwner(owner.getId(), BookingState.FUTURE);
+
+        assertThat(future).hasSize(1);
+    }
+
+    @Test
+    void getAllByOwner_shouldReturnWaiting() {
+        bookingService.create(booker.getId(), makeRequest(
+                LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2)));
+
+        List<BookingDto> waiting = bookingService.getAllByOwner(owner.getId(), BookingState.WAITING);
+
+        assertThat(waiting).hasSize(1);
+    }
+
+    @Test
+    void getAllByOwner_shouldReturnRejected() {
+        BookingDto created = bookingService.create(booker.getId(), makeRequest(
+                LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2)));
+        bookingService.approve(owner.getId(), created.getId(), false);
+
+        List<BookingDto> rejected = bookingService.getAllByOwner(owner.getId(), BookingState.REJECTED);
+
+        assertThat(rejected).hasSize(1);
+    }
+
+    @Test
+    void getAllByBooker_shouldReturnCurrent() {
+        bookingService.create(booker.getId(), makeRequest(
+                LocalDateTime.now().minusHours(1), LocalDateTime.now().plusDays(1)));
+
+        List<BookingDto> current = bookingService.getAllByBooker(booker.getId(), BookingState.CURRENT);
+
+        assertThat(current).hasSize(1);
+    }
+
+    @Test
+    void getAllByBooker_shouldReturnFuture() {
+        bookingService.create(booker.getId(), makeRequest(
+                LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2)));
+
+        List<BookingDto> future = bookingService.getAllByBooker(booker.getId(), BookingState.FUTURE);
+
+        assertThat(future).hasSize(1);
+    }
+
+    @Test
+    void getAllByBooker_shouldReturnPast() {
+        List<BookingDto> past = bookingService.getAllByBooker(booker.getId(), BookingState.PAST);
+
+        assertThat(past).isEmpty();
+    }
 }
