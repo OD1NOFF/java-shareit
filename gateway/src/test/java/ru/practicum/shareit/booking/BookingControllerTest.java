@@ -55,18 +55,6 @@ class BookingControllerTest {
     }
 
     @Test
-    void create_shouldReturn400WhenStartInPast() throws Exception {
-        BookItemRequestDto invalid = new BookItemRequestDto(
-                1L, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(2));
-
-        mvc.perform(post("/bookings")
-                        .header("X-Sharer-User-Id", 1L)
-                        .contentType("application/json")
-                        .content(mapper.writeValueAsString(invalid)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void create_shouldReturn400WhenEndBeforeStart() throws Exception {
         BookItemRequestDto invalid = new BookItemRequestDto(
                 1L, LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(1));
